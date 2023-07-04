@@ -8,15 +8,20 @@ import Dashboard from "../components/Dashboard.tsx";
 import {signOutAccount} from "../store/features/authSlice.ts";
 import {useDispatch} from "react-redux";
 import {AppDispatch} from "../store/store.ts";
+import {useNavigate} from "react-router-dom";
 
 const HomePage: FC = () => {
     const [userName, setUserName] = useState<String>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const dispatch = useDispatch<AppDispatch>();
+    const navigate = useNavigate();
 
-    const handleSignOut = () => {
-        dispatch(signOutAccount());
-    };
+
+    const goToProfilePage = () => {
+        navigate('/profile')
+    }
+
+
 
     const userIsExist = () => {
         try {
@@ -45,7 +50,7 @@ const HomePage: FC = () => {
                        elevation={24}>
                     <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
                         <Stack direction="row" justifyContent="space-between" sx={{padding: 2}} spacing={0}>
-                            <Button onClick={handleSignOut} variant="outlined" sx={{
+                            <Button onClick={() => dispatch(signOutAccount())} variant="outlined" sx={{
                                 borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
                                     bgcolor: grey[300],
                                 }}}>Sign Out</Button>
@@ -57,7 +62,7 @@ const HomePage: FC = () => {
                                         </>)
                                         : (<>
                                             <Avatar sx={{bgcolor: deepOrange[500], marginRight: 2}}>{avatarWord(userName.toString())}</Avatar>
-                                            <Button variant="outlined" sx={{borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', height: '40px', ":hover": {bgcolor: grey[300]}}}>
+                                            <Button onClick={goToProfilePage} variant="outlined" sx={{borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', height: '40px', ":hover": {bgcolor: grey[300]}}}>
                                                 {userName}
                                             </Button>
                                         </>)

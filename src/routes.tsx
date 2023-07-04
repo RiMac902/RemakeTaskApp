@@ -3,19 +3,24 @@ import HomePage from "./pages/HomePage.tsx";
 import {createBrowserRouter} from "react-router-dom";
 import {PrivateRoute} from "./components/PrivateRoute.tsx";
 import PageNotFound from "./components/PageNotFound.tsx";
+import Profile from "./pages/Profile.tsx";
 
 
 const privateRoutes = [
     {
         path: "/home",
-        element: <HomePage />,
+        element: <HomePage/>,
     },
+    {
+        path: "/profile",
+        element: <Profile/>
+    }
 ];
 
 const publicRoutes = [
     {
         path: "/",
-        element: <AuthPage />,
+        element: <AuthPage/>,
     },
     {
         path: "/*",

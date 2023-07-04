@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Box, Paper, Stack, Typography} from "@mui/material";
 import {indigo} from "@mui/material/colors";
 
-const PageNotFound:FC = () => {
+const PageNotFound: FC = () => {
     return (
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" flexDirection="column">
             <Paper elevation={5} sx={{padding: 5, borderRadius: 5}}>
