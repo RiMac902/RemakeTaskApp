@@ -1,4 +1,3 @@
-export const avatarWord = (str: any) => {
-    const firstWord = str.split('')[0].toUpperCase();
-    return firstWord;
+export const avatarWord = (str: string): string => {
+    return str.split('')[0].toUpperCase();
 }

@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Box, Paper, Stack, Typography} from "@mui/material";
 import {greeting} from "../helpers/dynamicTitle.ts";
 import {deepOrange} from "@mui/material/colors";
 
-const CreateTask = () => {
+const CreateTask: FC = () => {
     return (
         <Box>
             <Stack direction="column" sx={{alignItems: 'center'}}>

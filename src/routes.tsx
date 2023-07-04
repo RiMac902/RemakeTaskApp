@@ -2,6 +2,7 @@ import AuthPage from "./pages/AuthPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import {createBrowserRouter} from "react-router-dom";
 import {PrivateRoute} from "./components/PrivateRoute.tsx";
+import PageNotFound from "./components/PageNotFound.tsx";
 
 
 const privateRoutes = [
@@ -16,6 +17,10 @@ const publicRoutes = [
         path: "/",
         element: <AuthPage />,
     },
+    {
+        path: "/*",
+        element: <PageNotFound/>
+    }
 ];
 
 

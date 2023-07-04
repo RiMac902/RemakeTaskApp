@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Paper, Stack, Typography} from "@mui/material";
 import {grey} from "@mui/material/colors";
 import TaskItem from "./TaskItem.tsx";
 
-const TaskBoard = () => {
+const TaskBoard: FC = () => {
     return (
         <Stack direction="column" sx={{marginTop: 2}}>
             <Paper sx={{bgcolor: grey[50], marginX: 1, padding: 2, borderRadius: 5}} elevation={5}>

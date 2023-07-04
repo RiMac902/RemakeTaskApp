@@ -11,4 +11,4 @@ const getGreeting = (): string => {
     }
 };
 
-export const greeting = getGreeting();
+export const greeting: string = getGreeting();

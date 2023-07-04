@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Box, Button, Paper, Stack, Typography} from "@mui/material";
 import {indigo} from "@mui/material/colors";
 
 
-const NoneTask = () => {
+const NoneTask: FC = () => {
     return (
         <Box>
             <Stack direction="column" sx={{alignItems: 'center'}}>

@@ -1,22 +1,23 @@
 import {onAuthStateChanged, signOut} from "firebase/auth";
 import {firebaseAuth} from "../firebase.ts";
 import {Avatar, Box, Button, Paper, Skeleton, Stack, Typography} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {FC, useEffect, useState} from "react";
 import {deepOrange, grey, indigo} from '@mui/material/colors';
 import {avatarWord} from "../helpers/avatarWord.ts";
 import Dashboard from "../components/Dashboard.tsx";
+import {signOutAccount} from "../store/features/authSlice.ts";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../store/store.ts";
 
-const HomePage = () => {
+const HomePage: FC = () => {
     const [userName, setUserName] = useState<String>('');
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const dispatch = useDispatch<AppDispatch>();
 
-    const signOutAccount = () => {
-        try {
-            signOut(firebaseAuth)
-        } catch (error) {
-            console.log('Sign-out error:', error);
-        }
-    }
+    const handleSignOut = () => {
+        dispatch(signOutAccount());
+    };
+
     const userIsExist = () => {
         try {
             onAuthStateChanged(firebaseAuth, (user) => {
@@ -44,21 +45,21 @@ const HomePage = () => {
                        elevation={24}>
                     <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
                         <Stack direction="row" justifyContent="space-between" sx={{padding: 2}} spacing={0}>
-                            <Button onClick={signOutAccount} variant="outlined" sx={{borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
+                            <Button onClick={handleSignOut} variant="outlined" sx={{
+                                borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
                                     bgcolor: grey[300],
-                                }}}>Sign
-                                Out</Button>
+                                }}}>Sign Out</Button>
                             <Stack direction="row" alignItems="center">
-                                {
-                                    isLoading
+                                {isLoading
                                         ? (<>
-                                            <Skeleton variant="circular" width={40} height={40}
-                                                      sx={{marginX: 2}}/>
+                                            <Skeleton variant="circular" width={40} height={40} sx={{marginX: 2}}/>
                                             <Skeleton width={90} height={40} sx={{marginX: 2}}/>
                                         </>)
                                         : (<>
-                                            <Avatar sx={{bgcolor: deepOrange[500]}}>{avatarWord(userName)}</Avatar>
-                                            <Typography variant="h5" sx={{marginLeft: 2, color: 'white'}}>{userName}</Typography>
+                                            <Avatar sx={{bgcolor: deepOrange[500], marginRight: 2}}>{avatarWord(userName.toString())}</Avatar>
+                                            <Button variant="outlined" sx={{borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', height: '40px', ":hover": {bgcolor: grey[300]}}}>
+                                                {userName}
+                                            </Button>
                                         </>)
                                 }
                             </Stack>

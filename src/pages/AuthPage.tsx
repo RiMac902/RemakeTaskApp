@@ -1,71 +1,35 @@
-import {Box, Button, Paper, TextField, Typography} from "@mui/material";
-import {FormEvent, useEffect, useState} from "react";
-import {
-    createUserWithEmailAndPassword,
-    onAuthStateChanged,
-    signInWithEmailAndPassword,
-    updateProfile
-} from "firebase/auth";
-import {firebaseAuth} from "../firebase.ts";
+import {Box, Button, CircularProgress, Paper, TextField, Typography} from "@mui/material";
+import {FC, FormEvent, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {greeting} from "../helpers/dynamicTitle.ts";
+import {signIn, signUp} from "../store/features/authSlice.ts";
+import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
 
-const AuthPage = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [displayName, setDisplayName] = useState('');
-    const [isSignInMode, setIsSignInMode] = useState(false);
+const AuthPage: FC = () => {
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
+    const [displayName, setDisplayName] = useState<string>('');
+    const [isSignInMode, setIsSignInMode] = useState<boolean>(false);
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const {isLoading, error} = useAppSelector((state) => state.auth);
 
-
-    const signIn = async () => {
-        try {
-            const response = await signInWithEmailAndPassword(firebaseAuth, email, password);
-            console.log(response);
-            navigate('/home')
-        } catch (error) {
-            console.log('Sign-In error:', error);
-        }
+    const redirectToHome = () => {
+        navigate('/home')
     }
 
-    interface SignUpCredentials {
-        email: string;
-        password: string;
-        displayName: string;
-    }
-
-    const signUp = async ({email, password, displayName}: SignUpCredentials) => {
-        try {
-            const {user} = await createUserWithEmailAndPassword(firebaseAuth, email, password);
-            await updateProfile(user, {displayName});
-            navigate('/home')
-        } catch (error) {
-            console.log('Sign up failed:', error);
-        }
-    }
-
-
-    const onSubmitHandler = (event: FormEvent) => {
+    const onSubmitHandler = async (event: FormEvent) => {
         event.preventDefault();
-
         if (!isSignInMode) {
-            signIn();
+            await dispatch(signIn({email, password, redirectToHome}));
         } else {
-            const signUpCredentials: SignUpCredentials = {
-                email: email,
-                password: password,
-                displayName: displayName,
-            };
-            signUp(signUpCredentials);
+            await dispatch(signUp({email, password, displayName, redirectToHome}));
         }
-
-
-    }
+    };
 
     const toggleMode = () => {
         setIsSignInMode(!isSignInMode);
     }
-
 
     return (
         <Box display="flex"
@@ -73,6 +37,7 @@ const AuthPage = () => {
              alignItems="center"
              minHeight="100vh"
              flexDirection="column">
+            <>{ isLoading ? <CircularProgress/> :
             <Paper elevation={5} sx={{padding: 5, borderRadius: 5,}}>
                 <Box sx={{display: 'flex', justifyContent: 'center'}}>
                     <Typography variant="h4">{isSignInMode ? 'Create Account' : greeting}</Typography>
@@ -152,6 +117,7 @@ const AuthPage = () => {
                     )}
                 </Box>
             </Paper>
+                }</>
         </Box>
     );
 };

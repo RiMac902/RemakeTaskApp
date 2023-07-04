@@ -1,13 +1,13 @@
 import {onAuthStateChanged} from "firebase/auth";
 import {firebaseAuth} from "../firebase.ts";
-import {ReactNode, useEffect} from "react";
+import {FC, ReactNode, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 
 type Props  = {
     children: ReactNode;
 }
 
-export const PrivateRoute = ({children}: Props) => {
+export const PrivateRoute: FC<Props> = ({children}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -19,7 +19,6 @@ export const PrivateRoute = ({children}: Props) => {
                 navigate('/');
             }
         })
-
         return ():void => userIsExist();
     }, [])
 
