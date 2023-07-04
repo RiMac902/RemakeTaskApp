@@ -20,7 +20,7 @@ const TaskItem: FC = () => {
         <Stack direction="column" sx={{marginTop: 2}}>
             <Paper sx={{bgcolor: indigo[500], marginX: 1, padding: 2, borderRadius: 5}} elevation={5}>
                 <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
-                    <Typography variant="h6" sx={{marginX: 1, color: 'white'}}>Task Item</Typography>
+                    <Typography variant="h6" sx={{marginX: 1, color: 'white', userSelect: 'none'}}>Task Item</Typography>
                    <Stack  direction={'row'} alignItems={'center'}>
                        <AvatarGroup max={4}>
                            <Avatar alt="Remy Sharp" sx={{ bgcolor: deepOrange[500] }} src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" />
@@ -34,7 +34,7 @@ const TaskItem: FC = () => {
                        </IconButton>
                    </Stack>
                     <BorderLinearProgress variant="determinate" value={70} sx={{width: '19%', marginX: 1}}/>
-                    <Typography variant="h6" sx={{marginX: 3, color: 'white'}}>{formattedDate}</Typography>
+                    <Typography variant="h6" sx={{marginX: 3, color: 'white', userSelect: 'none'}}>{formattedDate}</Typography>
                     <IconButton sx={{marginX: 2}}>
                         <MoreHorizIcon sx={{color: 'white', fontSize: 30}} />
                     </IconButton>

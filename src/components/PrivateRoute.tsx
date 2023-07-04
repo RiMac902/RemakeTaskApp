@@ -1,14 +1,13 @@
-import {onAuthStateChanged} from "firebase/auth";
 import {firebaseAuth} from "../firebase.ts";
 import {FC, ReactNode, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import useFetchUserData from "../hooks/getUserData.tsx";
 
-type Props = {
+type Children = {
     children: ReactNode;
 }
 
-export const PrivateRoute: FC<Props> = ({children}) => {
+export const PrivateRoute: FC<Children> = ({children}) => {
     const navigate = useNavigate();
     const {getUser, isLoading, error} = useFetchUserData(firebaseAuth);
 
