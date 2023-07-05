@@ -1,26 +1,21 @@
 import {firebaseAuth} from "../firebase.ts";
 import {FC, ReactNode, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
-import useFetchUserData from "../hooks/getUserData.tsx";
+import {onAuthStateChanged} from "firebase/auth";
 
 type Children = {
     children: ReactNode;
 }
-
 export const PrivateRoute: FC<Children> = ({children}) => {
     const navigate = useNavigate();
-    const {getUser, isLoading, error} = useFetchUserData(firebaseAuth);
 
     useEffect(() => {
-        if (isLoading) {
-            if (getUser) {
-                navigate('/home');
-            } else {
-                navigate('/');
-            }
-        }
-        if (error) alert(error);
-    }, [isLoading, getUser, navigate, error]);
+        const userIsExist = onAuthStateChanged(firebaseAuth, (user) => {
+            if (!user) return navigate('/');
+        })
+        return (): void => userIsExist();
+    }, [])
 
     return children;
 };
+

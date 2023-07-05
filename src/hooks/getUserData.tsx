@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react';
 import {User, Auth, onAuthStateChanged} from 'firebase/auth';
 
 const useFetchUserData = (firebaseAuth: Auth) => {
-    const [getUser, setUser] = useState<User>();
+    const [getUser, setUser] = useState<User | null>(null);
     const [isLoading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>('');
 
@@ -10,7 +10,11 @@ const useFetchUserData = (firebaseAuth: Auth) => {
         const listener = onAuthStateChanged(firebaseAuth, async (user: User | null) => {
             try {
                 setLoading(true);
-                if (user) setUser(user);
+                if (user) {
+                    setUser(user);
+                } else {
+                    setUser(null);
+                }
             } catch (error: any) {
                 setError(error.message)
             } finally {

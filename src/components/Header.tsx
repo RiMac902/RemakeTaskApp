@@ -20,6 +20,10 @@ const Header = () => {
         navigate('/profile')
     }
 
+    const singOutHandle = () => {
+        dispatch(signOutAccount());
+    }
+
     const userIsExist = () => {
         try {
             onAuthStateChanged(firebaseAuth, (user) => {
@@ -30,8 +34,8 @@ const Header = () => {
                     setUserName('Username');
                 }
             })
-        } catch (error) {
-            alert('User name Error');
+        } catch (error: any) {
+            throw new Error(error);
         }
     }
 
@@ -43,7 +47,7 @@ const Header = () => {
     return (
         <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
             <Stack direction="row" justifyContent="space-between" sx={{padding: 2}} spacing={0}>
-                <Button onClick={() => dispatch(signOutAccount())} variant="outlined" sx={{
+                <Button onClick={singOutHandle} variant="outlined" sx={{
                     borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
                         bgcolor: grey[300],
                     }}}>Sign Out</Button>
