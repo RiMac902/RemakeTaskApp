@@ -14,8 +14,12 @@ import {deepOrange, deepPurple, green, indigo} from "@mui/material/colors";
 import {formattedDate} from "../helpers/date.ts";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddCircleOutlineTwoToneIcon from '@mui/icons-material/AddCircleOutlineTwoTone';
+import {useAuth} from "../hooks/useAuth.tsx";
 
 const TaskItem: FC = () => {
+    const currentUser =  useAuth();
+
+
     return (
         <Stack direction="column" sx={{marginTop: 2}}>
             <Paper sx={{bgcolor: indigo[500], marginX: 1, padding: 2, borderRadius: 5}} elevation={5}>
@@ -23,7 +27,12 @@ const TaskItem: FC = () => {
                     <Typography variant="h6" sx={{marginX: 1, color: 'white', userSelect: 'none'}}>Task Item</Typography>
                    <Stack  direction={'row'} alignItems={'center'}>
                        <AvatarGroup max={4}>
-                           <Avatar alt="Remy Sharp" sx={{ bgcolor: deepOrange[500] }} src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" />
+                           {currentUser?.photoURL ? (
+                           <Avatar sx={{ bgcolor: deepOrange[500] }} src={currentUser.photoURL} />
+                       ) : (
+                           <Avatar sx={{ bgcolor: deepOrange[500] }} />
+                       )}
+                           {/*<Avatar alt="Remy Sharp" sx={{ bgcolor: deepOrange[500] }} src={currentUser?.photoURL}/>*/}
                            <Avatar alt="Travis Howard" sx={{ bgcolor: deepPurple[500] }} src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" />
                            <Avatar alt="Cindy Baker" sx={{ bgcolor: green[500] }} src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" />
                            <Avatar alt="Agnes Walker" sx={{ bgcolor: deepPurple[500] }} src="https://images.unsplash.com/photo-1527980965255-d3b416303d12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80" />

@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile} from "firebase/auth";
 import {firebaseAuth} from "../../firebase.ts";
 import {AuthState, SignInCredentials, SignUpCredentials} from "../../types/authType.ts";
@@ -68,7 +68,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-        setLoading: (state, action) => {
+        setLoading: (state, action: PayloadAction<boolean>) => {
             state.isLoading = action.payload;
         },
     },

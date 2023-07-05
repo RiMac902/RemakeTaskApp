@@ -1,3 +1,6 @@
 export const avatarWord = (str: string): string => {
-    return str.split('')[0].toUpperCase();
-}
+    if (str && str.trim().length > 0) {
+        return str.trim().charAt(0).toUpperCase();
+    }
+    return '';
+};

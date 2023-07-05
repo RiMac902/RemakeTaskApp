@@ -1,48 +1,33 @@
-import React, {useEffect, useState} from 'react';
-import {deepOrange, grey, indigo} from "@mui/material/colors";
-import {Avatar, Button, Paper, Skeleton, Stack} from "@mui/material";
+import React from 'react';
+import {grey, indigo} from "@mui/material/colors";
+import {Avatar, Button, Paper, Skeleton, Stack, Typography} from "@mui/material";
 import {signOutAccount} from "../store/features/authSlice.ts";
 import {useAppDispatch} from "../hooks/reduxHooks.ts";
-import {avatarWord} from "../helpers/avatarWord.ts";
 import {useLocation, useNavigate} from "react-router-dom";
-import {onAuthStateChanged} from "firebase/auth";
 import {firebaseAuth} from "../firebase.ts";
+import getUserData from "../hooks/getUserData.tsx";
+import {avatarWord} from "../helpers/avatarWord.ts";
+import LazyLoad from 'react-lazyload';
+
 
 const Header = () => {
-    const [userName, setUserName] = useState<String>('');
-    const [isLoading, setIsLoading] = useState<boolean>(true);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const location = useLocation();
     const currentPath = location.pathname;
 
-    const goToProfilePage = () => {
-        navigate('/profile')
-    }
+    const {getUser, isLoading, error} = getUserData(firebaseAuth);
+    const userName = getUser?.displayName;
+    const profilePhoto = getUser?.photoURL;
 
-    const singOutHandle = () => {
-        dispatch(signOutAccount());
-    }
 
-    const userIsExist = () => {
-        try {
-            onAuthStateChanged(firebaseAuth, (user) => {
-                if (user && user.displayName) {
-                    setUserName(user.displayName);
-                    setIsLoading(false)
-                } else {
-                    setUserName('Username');
-                }
-            })
-        } catch (error: any) {
-            throw new Error(error);
-        }
-    }
+    const goToProfilePage = () => navigate('/profile');
+    const singOutHandle = () => dispatch(signOutAccount());
 
-    useEffect(() => {
-        userIsExist();
-        return (): void => userIsExist();
-    }, []);
+
+    if (error) {
+        return <Typography variant={'h1'}>Error!!!</Typography>;
+    }
 
     return (
         <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
@@ -50,7 +35,8 @@ const Header = () => {
                 <Button onClick={singOutHandle} variant="outlined" sx={{
                     borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
                         bgcolor: grey[300],
-                    }}}>Sign Out</Button>
+                    }
+                }}>Sign Out</Button>
                 <Stack direction="row" alignItems="center">
                     {isLoading
                         ? (<>
@@ -58,8 +44,17 @@ const Header = () => {
                             <Skeleton width={90} height={40} sx={{marginX: 2}}/>
                         </>)
                         : (<>
-                            <Avatar sx={{bgcolor: deepOrange[500], marginRight: 2}}>{avatarWord(userName.toString())}</Avatar>
-                            <Button disabled={currentPath === '/profile'} onClick={goToProfilePage} variant="outlined" sx={{borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', height: '40px', ":hover": {bgcolor: grey[300]}}}>
+                            <LazyLoad once>
+                                <Avatar sx={{marginRight: 2}} src={profilePhoto || ''}>{avatarWord(userName!)}</Avatar>
+                            </LazyLoad>
+                            <Button disabled={currentPath === '/profile'} onClick={goToProfilePage} variant="outlined"
+                                    sx={{
+                                        borderRadius: 5,
+                                        fontWeight: 'bold',
+                                        backgroundColor: 'white',
+                                        height: '40px',
+                                        ":hover": {bgcolor: grey[300]}
+                                    }}>
                                 {userName}
                             </Button>
                         </>)
