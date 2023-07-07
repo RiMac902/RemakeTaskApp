@@ -14,11 +14,12 @@ import {deepOrange, deepPurple, green, indigo} from "@mui/material/colors";
 import {formattedDate} from "../helpers/date.ts";
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import AddCircleOutlineTwoToneIcon from '@mui/icons-material/AddCircleOutlineTwoTone';
-import {useAuth} from "../hooks/useAuth.tsx";
+import getUserData from "../hooks/getUserData.tsx";
+import {firebaseAuth} from "../firebase.ts";
 
 const TaskItem: FC = () => {
-    const currentUser =  useAuth();
-
+    const {getUser} = getUserData(firebaseAuth);
+    const { photoURL} = getUser ?? {};
 
     return (
         <Stack direction="column" sx={{marginTop: 2}}>
@@ -27,8 +28,8 @@ const TaskItem: FC = () => {
                     <Typography variant="h6" sx={{marginX: 1, color: 'white', userSelect: 'none'}}>Task Item</Typography>
                    <Stack  direction={'row'} alignItems={'center'}>
                        <AvatarGroup max={4}>
-                           {currentUser?.photoURL ? (
-                           <Avatar sx={{ bgcolor: deepOrange[500] }} src={currentUser.photoURL} />
+                           {photoURL ? (
+                           <Avatar sx={{ bgcolor: deepOrange[500] }} src={photoURL} />
                        ) : (
                            <Avatar sx={{ bgcolor: deepOrange[500] }} />
                        )}

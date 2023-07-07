@@ -1,4 +1,4 @@
-import {Box, Button, Paper, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, Paper, Typography} from "@mui/material";
 import React, {useState} from "react";
 import Header from "../components/Header.tsx";
 import {firebaseAuth} from "../firebase.ts";
@@ -29,12 +29,16 @@ const Profile = () => {
                 <Header/>
                 <Typography variant={'h1'}>{getUser?.displayName || 'Loading...'}</Typography>
 
-
-                <Button onClick={handleClick} variant="contained" component="label">
-                    Upload File
-                </Button>
-
-                <input type="file" onChange={handleChange}/>
+                {isLoading ? (
+                    <CircularProgress />
+                ) : (
+                    <>
+                        <Button onClick={handleClick} variant="contained" component="label">
+                            Upload File
+                        </Button>
+                        <input type="file" onChange={handleChange} />
+                    </>
+                )}
             </Paper>
         </Box>
     );
