@@ -8,6 +8,6 @@ export interface IUser {
 }
 
 export interface UploadAvatar {
-    file: File,
-    user: User,
+    file: File | null,
+    user: User | null,
 }

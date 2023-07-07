@@ -1,8 +1,7 @@
-import {createAsyncThunk, createSlice, isRejectedWithValue, PayloadAction} from "@reduxjs/toolkit";
-import {onAuthStateChanged, updateProfile, User} from "firebase/auth";
-import {database, firebaseAuth, storage} from "../../firebase.ts";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {updateProfile, User} from "firebase/auth";
+import {storage} from "../../firebase.ts";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {ref as refDB, set as setDB} from "firebase/database";
 import {UploadAvatar} from "../../types/userType.ts";
 
 interface UserState {
@@ -23,17 +22,14 @@ export const uploadAvatar = createAsyncThunk(
     'user/uploadAvatar',
     async ({file, user}: UploadAvatar, {dispatch, rejectWithValue}) => {
         try {
-            const storageRef = ref(storage, user.uid);
-            await uploadBytes(storageRef, file);
+            const storageRef = ref(storage, user!.uid);
+            await uploadBytes(storageRef, file!);
             const photoURL = await getDownloadURL(storageRef);
-            await updateProfile(user, {photoURL});
+            await updateProfile(user!, {photoURL});
             return photoURL;
         } catch (error) {
             return rejectWithValue(error);
-        } finally {
-            console.log('user/uploadAvatar called')
         }
-
     }
 );
 

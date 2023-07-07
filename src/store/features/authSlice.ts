@@ -1,4 +1,4 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile} from "firebase/auth";
 import {firebaseAuth} from "../../firebase.ts";
 import {AuthState, SignInCredentials, SignUpCredentials} from "../../types/authType.ts";
@@ -18,7 +18,7 @@ export const signIn = createAsyncThunk(
             return {email: userEmail, displayName} as IUser;
         } catch (error) {
             return rejectWithValue(error);
-        } finally {}
+        }
     }
 );
 
@@ -34,7 +34,7 @@ export const signUp = createAsyncThunk(
             return {email, displayName} as IUser;
         } catch (error) {
             return rejectWithValue(error);
-        } finally {}
+        }
     }
 );
 
@@ -45,7 +45,7 @@ export const signOutAccount = createAsyncThunk(
             signOut(firebaseAuth);
         } catch (error) {
             return rejectWithValue(error);
-        } finally {}
+        }
     }
 );
 
@@ -58,11 +58,7 @@ const initialState: AuthState = {
 const authSlice = createSlice({
     name: 'auth',
     initialState,
-    reducers: {
-        setLoading: (state, action: PayloadAction<boolean>) => {
-            state.isLoading = action.payload;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(signIn.pending, (state) => {

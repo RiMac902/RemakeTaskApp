@@ -1,13 +1,12 @@
 import React from 'react';
 import {grey, indigo} from "@mui/material/colors";
-import {Avatar, Button, Paper, Skeleton, Stack, Typography} from "@mui/material";
+import {Avatar, Button, Paper, Skeleton, Stack} from "@mui/material";
 import {signOutAccount} from "../store/features/authSlice.ts";
 import {useAppDispatch} from "../hooks/reduxHooks.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {firebaseAuth} from "../firebase.ts";
 import getUserData from "../hooks/getUserData.tsx";
 import {avatarWord} from "../helpers/avatarWord.ts";
-import LazyLoad from 'react-lazyload';
 
 
 const Header = () => {
@@ -17,17 +16,11 @@ const Header = () => {
     const currentPath = location.pathname;
 
     const {getUser, isLoading, error} = getUserData(firebaseAuth);
-    const userName = getUser?.displayName;
-    const profilePhoto = getUser?.photoURL;
-
+    const {displayName, photoURL} = getUser ?? {};
 
     const goToProfilePage = () => navigate('/profile');
     const singOutHandle = () => dispatch(signOutAccount());
 
-
-    if (error) {
-        return <Typography variant={'h1'}>Error!!!</Typography>;
-    }
 
     return (
         <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
@@ -44,9 +37,7 @@ const Header = () => {
                             <Skeleton width={90} height={40} sx={{marginX: 2}}/>
                         </>)
                         : (<>
-                            <LazyLoad once>
-                                <Avatar sx={{marginRight: 2}} src={profilePhoto || ''}>{avatarWord(userName!)}</Avatar>
-                            </LazyLoad>
+                            <Avatar sx={{marginRight: 2}} src={photoURL || ''}>{avatarWord(displayName!)}</Avatar>
                             <Button disabled={currentPath === '/profile'} onClick={goToProfilePage} variant="outlined"
                                     sx={{
                                         borderRadius: 5,
@@ -55,7 +46,7 @@ const Header = () => {
                                         height: '40px',
                                         ":hover": {bgcolor: grey[300]}
                                     }}>
-                                {userName}
+                                {displayName}
                             </Button>
                         </>)
                     }

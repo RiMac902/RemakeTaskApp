@@ -1,46 +1,26 @@
 import {Box, Button, Paper, Typography} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Header from "../components/Header.tsx";
-import {firebaseAuth, storage} from "../firebase.ts";
-import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
-import {updateProfile, User} from "firebase/auth";
+import {firebaseAuth} from "../firebase.ts";
 import getUserData from "../hooks/getUserData.tsx";
-import {useAppDispatch} from "../hooks/reduxHooks.ts";
+import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
+import {uploadAvatar} from "../store/features/userSlice.ts";
 
 const Profile = () => {
-    const [photoURL, setPhotoURL] = useState<string | undefined>();
     const [photo, setPhoto] = useState<File | null>(null);
     const {getUser} = getUserData(firebaseAuth);
+    const {  isLoading, error } = useAppSelector(state => state.user);
     const dispatch = useAppDispatch();
 
-    async function upload(file: File | null, getUser: User) {
-        const fileRef = ref(storage, getUser.uid);
-
-        const snapshot = await uploadBytes(fileRef, file!);
-        const photoURL = await getDownloadURL(fileRef);
-
-        updateProfile(getUser, {photoURL});
-
-        alert("Uploaded file!");
-    }
-
-    function handleChange(e: any) {
-        if (e.target.files[0]) {
-            setPhoto(e.target.files[0])
-
+    const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setPhoto(e.target.files[0]);
         }
-    }
+    };
 
-    function handleClick() {
-        upload(photo || null, getUser!);
-    }
-
-    useEffect(() => {
-        if (getUser?.photoURL) {
-            setPhotoURL(getUser.photoURL);
-        }
-
-    }, [getUser])
+    const handleClick = () => {
+        dispatch(uploadAvatar({ file: photo, user: getUser }));
+    };
 
 
     return (
