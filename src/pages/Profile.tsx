@@ -4,19 +4,17 @@ import Header from "../components/Header.tsx";
 import {firebaseAuth, storage} from "../firebase.ts";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {updateProfile, User} from "firebase/auth";
-import {useAuth} from "../hooks/useAuth.tsx";
 import getUserData from "../hooks/getUserData.tsx";
+import {useAppDispatch} from "../hooks/reduxHooks.ts";
 
 const Profile = () => {
-    const currentUser = useAuth();
     const [photoURL, setPhotoURL] = useState<string | undefined>();
     const [photo, setPhoto] = useState<File | null>(null);
     const {getUser} = getUserData(firebaseAuth);
-
-
+    const dispatch = useAppDispatch();
 
     async function upload(file: File | null, getUser: User) {
-        const fileRef = ref(storage, getUser.uid + '.png');
+        const fileRef = ref(storage, getUser.uid);
 
         const snapshot = await uploadBytes(fileRef, file!);
         const photoURL = await getDownloadURL(fileRef);
@@ -28,7 +26,6 @@ const Profile = () => {
 
     function handleChange(e: any) {
         if (e.target.files[0]) {
-            const file = e.target.files[0];
             setPhoto(e.target.files[0])
 
         }
@@ -42,6 +39,7 @@ const Profile = () => {
         if (getUser?.photoURL) {
             setPhotoURL(getUser.photoURL);
         }
+
     }, [getUser])
 
 
@@ -52,11 +50,11 @@ const Profile = () => {
                 <Typography variant={'h1'}>{getUser?.displayName || 'Loading...'}</Typography>
 
 
-                    <Button  onClick={handleClick} variant="contained" component="label">
-                        Upload File
-                    </Button>
+                <Button onClick={handleClick} variant="contained" component="label">
+                    Upload File
+                </Button>
 
-                <input type="file" onChange={handleChange} />
+                <input type="file" onChange={handleChange}/>
             </Paper>
         </Box>
     );

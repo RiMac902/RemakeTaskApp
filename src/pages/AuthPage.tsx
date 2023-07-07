@@ -1,7 +1,6 @@
 import {Box, Button, CircularProgress, Paper, TextField, Typography} from "@mui/material";
 import {FC, FormEvent, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {greeting} from "../helpers/dynamicTitle.ts";
 import {signIn, signUp} from "../store/features/authSlice.ts";
 import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
 
@@ -40,7 +39,7 @@ const AuthPage: FC = () => {
             <>{ isLoading ? <CircularProgress/> :
             <Paper elevation={5} sx={{padding: 5, borderRadius: 5,}}>
                 <Box sx={{display: 'flex', justifyContent: 'center'}}>
-                    <Typography variant="h4">{isSignInMode ? 'Create Account' : greeting}</Typography>
+                    <Typography gutterBottom variant="h4">{isSignInMode ? 'Create Account' : 'Welcome back'}</Typography>
                 </Box>
                 <Box sx={{
                     display: 'flex',

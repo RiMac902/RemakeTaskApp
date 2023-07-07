@@ -2,45 +2,39 @@ import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile} from "firebase/auth";
 import {firebaseAuth} from "../../firebase.ts";
 import {AuthState, SignInCredentials, SignUpCredentials} from "../../types/authType.ts";
-import {User} from "../../types/userType.ts";
+import {IUser} from "../../types/userType.ts";
 
 
 export const signIn = createAsyncThunk(
     'auth/signIn',
-    async ({email, password, redirectToHome}: SignInCredentials, {dispatch}) => {
+    async ({email, password, redirectToHome}: SignInCredentials, {dispatch, rejectWithValue}) => {
         try {
-            dispatch(authSlice.actions.setLoading(true));
             const response = await signInWithEmailAndPassword(firebaseAuth, email, password);
             const user = response.user;
             const {email: userEmail, displayName} = user;
             if (redirectToHome) {
                 redirectToHome();
             }
-            return {email: userEmail, displayName} as User;
-        } catch (error: any) {
-            throw new Error(error.message);
-        } finally {
-            dispatch(authSlice.actions.setLoading(false));
-        }
+            return {email: userEmail, displayName} as IUser;
+        } catch (error) {
+            return rejectWithValue(error);
+        } finally {}
     }
 );
 
 export const signUp = createAsyncThunk(
     'auth/signUp',
-    async ({email, password, displayName, redirectToHome}: SignUpCredentials, {dispatch}) => {
+    async ({email, password, displayName, redirectToHome}: SignUpCredentials, {dispatch, rejectWithValue}) => {
         try {
-            dispatch(authSlice.actions.setLoading(true));
             const {user} = await createUserWithEmailAndPassword(firebaseAuth, email, password);
             await updateProfile(user, {displayName});
             if (redirectToHome) {
                 redirectToHome();
             }
-            return {email, displayName} as User;
-        } catch (error: any) {
-            throw new Error(error.message);
-        } finally {
-            dispatch(authSlice.actions.setLoading(false));
-        }
+            return {email, displayName} as IUser;
+        } catch (error) {
+            return rejectWithValue(error);
+        } finally {}
     }
 );
 
@@ -48,13 +42,10 @@ export const signOutAccount = createAsyncThunk(
     'auth/signOut',
     async (_, {dispatch, rejectWithValue}) => {
         try {
-            dispatch(authSlice.actions.setLoading(true));
             signOut(firebaseAuth);
-        } catch (error: any) {
-            return rejectWithValue(error.message);
-        } finally {
-            dispatch(authSlice.actions.setLoading(false));
-        }
+        } catch (error) {
+            return rejectWithValue(error);
+        } finally {}
     }
 );
 
@@ -86,7 +77,7 @@ const authSlice = createSlice({
             .addCase(signIn.rejected, (state, action) => {
                 state.isLoading = false;
                 state.user = null;
-                state.error = action.payload as string | null;
+                state.error = action.payload as string;
             })
             .addCase(signUp.pending, (state) => {
                 state.isLoading = true;
@@ -100,7 +91,7 @@ const authSlice = createSlice({
             .addCase(signUp.rejected, (state, action) => {
                 state.isLoading = false;
                 state.user = null;
-                state.error = action.payload as string | null;
+                state.error = action.payload as string;
             })
             .addCase(signOutAccount.pending, (state) => {
                 state.isLoading = true;
@@ -113,7 +104,7 @@ const authSlice = createSlice({
             })
             .addCase(signOutAccount.rejected, (state, action) => {
                 state.isLoading = false;
-                state.error = action.error.message as string;
+                state.error = action.payload as string;
             });
     }
 });

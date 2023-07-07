@@ -1,45 +1,35 @@
-import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, isRejectedWithValue, PayloadAction} from "@reduxjs/toolkit";
 import {onAuthStateChanged, updateProfile, User} from "firebase/auth";
 import {database, firebaseAuth, storage} from "../../firebase.ts";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {ref as refDB, set as setDB} from "firebase/database";
-
+import {UploadAvatar} from "../../types/userType.ts";
 
 interface UserState {
     user: User | null;
-    password: string,
-    email: string,
-    isLoading: false,
+    photoURL: string | undefined;
+    isLoading: boolean,
     error: string | null,
 }
 
 const initialState: UserState = {
     user: null,
-    password: '',
-    email: '',
+    photoURL: undefined,
     isLoading: false,
-    error: '',
+    error: null,
 }
 
 export const uploadAvatar = createAsyncThunk(
     'user/uploadAvatar',
-    async (file: File, {dispatch, getState}) => {
-        const {user} = <UserState>getState();
+    async ({file, user}: UploadAvatar, {dispatch, rejectWithValue}) => {
         try {
-            if (user) {
-                const storageRef = ref(storage, `users/${user.uid}`);
-                await uploadBytes(storageRef, file);
-                const photoURL = await getDownloadURL(storageRef);
-
-                // DataBase
-                // updateProfile(user, {photoURL});
-                // const userRef = refDB(database, `users/${user.uid}`);
-                // await setDB(userRef, updatedUser);
-
-                dispatch(setAvatarUrl(photoURL));
-            }
-        } catch (error: any) {
-
+            const storageRef = ref(storage, user.uid);
+            await uploadBytes(storageRef, file);
+            const photoURL = await getDownloadURL(storageRef);
+            await updateProfile(user, {photoURL});
+            return photoURL;
+        } catch (error) {
+            return rejectWithValue(error);
         } finally {
             console.log('user/uploadAvatar called')
         }
@@ -47,39 +37,27 @@ export const uploadAvatar = createAsyncThunk(
     }
 );
 
-export const userData = createAsyncThunk('user/userData',
-    async (_,{getState, dispatch}) => {
-        try {
-            onAuthStateChanged(firebaseAuth, (userData) => {
-               const {user} = <UserState>getState();
-               dispatch(setUserData(user));
-            });
-        } catch (error: any) {
-            throw new Error(error);
-        } finally {
-            console.log('userData called')
-        }
-    });
-
 
 const userSlice = createSlice({
     name: 'user',
     initialState,
-    reducers: {
-        setUserData: (state, action: PayloadAction<User | null>) => {
-            state.user = action.payload;
-        },
-        setAvatarUrl: (state, action: PayloadAction<string>) => {
-            if (state.user) {
-                state.user.photoURL = action.payload;
-            }
-        },
-    },
+    reducers: {},
     extraReducers: builder => {
-
+        builder
+            .addCase(uploadAvatar.pending, (state) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+            .addCase(uploadAvatar.fulfilled, (state, action) => {
+                state.isLoading = true;
+                state.photoURL = action.payload;
+                state.error = null;
+            })
+            .addCase(uploadAvatar.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload as string;
+            })
     }
 });
 
-
-export const {setAvatarUrl, setUserData} = userSlice.actions;
 export const userReducer = userSlice.reducer;

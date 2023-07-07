@@ -1,4 +1,4 @@
-import {User} from "./userType.ts";
+import {IUser} from "./userType.ts";
 
 export interface SignUpCredentials {
     email: string;
@@ -14,7 +14,8 @@ export interface SignInCredentials {
 }
 
 export interface AuthState {
-    user: User | null;
+    user: IUser | null;
     isLoading: boolean;
     error: string | null;
 }
+
