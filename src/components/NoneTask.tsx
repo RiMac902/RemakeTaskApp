@@ -1,18 +1,20 @@
 import React, {FC} from 'react';
-import {Box, Button, Paper, Stack, Typography} from "@mui/material";
-import {indigo} from "@mui/material/colors";
+import {Button, Paper, Stack, Typography} from "@mui/material";
+import {grey, indigo} from "@mui/material/colors";
 
 
 const NoneTask: FC = () => {
     return (
-        <Box>
-            <Stack direction="column" sx={{alignItems: 'center'}}>
-                <Paper sx={{bgcolor: indigo[500], marginX: 3, padding: 2, borderRadius: 5}} elevation={10}>
-                    <Typography variant="h4"sx={{marginX: 3, color: 'white'}}>Create New Task</Typography>
-                    <Button variant="contained" sx={{borderRadius: 5}}>Create</Button>
-                </Paper>
-            </Stack>
-        </Box>
+        <Stack direction="column">
+            <Paper sx={{bgcolor: indigo[500], marginX: 2, padding: 2, borderRadius: 5}} elevation={10}>
+                <Typography variant="h4" sx={{marginX: 1, color: 'white'}}>Create New Task</Typography>
+                <Button variant="outlined" sx={{
+                    borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
+                        bgcolor: grey[300],
+                    }
+                }}>Create</Button>
+            </Paper>
+        </Stack>
     );
 };
 

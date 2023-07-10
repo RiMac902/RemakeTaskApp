@@ -26,9 +26,9 @@ const Header = () => {
         <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
             <Stack direction="row" justifyContent="space-between" sx={{padding: 2}} spacing={0}>
                 <Button onClick={singOutHandle} variant="outlined" sx={{
-                    borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
-                        bgcolor: grey[300],
-                    }
+                        borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
+                            bgcolor: grey[300],
+                        }
                 }}>Sign Out</Button>
                 <Stack direction="row" alignItems="center">
                     {isLoading

@@ -50,7 +50,7 @@ const AuthPage: FC = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', width: '300px' }}>
                             <form onSubmit={onSubmit}>
                                 <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', width: '300px' }}>
-                                    {isSignInMode ? (
+                                    {isSignInMode && (
                                         <Controller
                                             name="displayName"
                                             control={control}
@@ -78,8 +78,7 @@ const AuthPage: FC = () => {
                                                 />
                                             )}
                                         />
-                                    ) : null}
-
+                                    )}
                                     <Controller
                                         name="email"
                                         control={control}
