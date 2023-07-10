@@ -45,7 +45,7 @@ const userSlice = createSlice({
                 state.error = null;
             })
             .addCase(uploadAvatar.fulfilled, (state, action) => {
-                state.isLoading = true;
+                state.isLoading = false;
                 state.photoURL = action.payload;
                 state.error = null;
             })

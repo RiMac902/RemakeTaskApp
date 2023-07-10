@@ -1,10 +1,11 @@
-import {Box, Button, CircularProgress, Paper, Typography} from "@mui/material";
+import {Box, Paper, Typography} from "@mui/material";
 import React, {useState} from "react";
 import Header from "../components/Header.tsx";
 import {firebaseAuth} from "../firebase.ts";
 import getUserData from "../hooks/getUserData.tsx";
 import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
 import {uploadAvatar} from "../store/features/userSlice.ts";
+import LoadingButton from '@mui/lab/LoadingButton';
 
 const Profile = () => {
     const [photo, setPhoto] = useState<File | null>(null);
@@ -29,16 +30,16 @@ const Profile = () => {
                 <Header/>
                 <Typography variant={'h1'}>{getUser?.displayName || 'Loading...'}</Typography>
 
-                {isLoading ? (
-                    <CircularProgress />
-                ) : (
-                    <>
-                        <Button onClick={handleClick} variant="contained" component="label">
-                            Upload File
-                        </Button>
-                        <input type="file" onChange={handleChange} />
-                    </>
-                )}
+                <Box display="flex" alignItems={'center'}>
+                    <LoadingButton
+                        onClick={handleClick}
+                        variant="contained"
+                        component="label"
+                        loading={isLoading}>
+                        Upload File
+                    </LoadingButton>
+                    <input type="file" onChange={handleChange} />
+                </Box>
             </Paper>
         </Box>
     );

@@ -17,7 +17,7 @@ export const signIn = createAsyncThunk(
             }
             return {email: userEmail, displayName} as IUser;
         } catch (error) {
-            return rejectWithValue(error);
+            return rejectWithValue('Authentication failed');
         }
     }
 );
@@ -33,7 +33,7 @@ export const signUp = createAsyncThunk(
             }
             return {email, displayName} as IUser;
         } catch (error) {
-            return rejectWithValue(error);
+            return rejectWithValue('Authentication failed');
         }
     }
 );

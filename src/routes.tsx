@@ -4,6 +4,7 @@ import {createBrowserRouter} from "react-router-dom";
 import {PrivateRoute} from "./components/PrivateRoute.tsx";
 import PageNotFound from "./components/PageNotFound.tsx";
 import Profile from "./pages/Profile.tsx";
+import AuthPageForm from "./pages/AuthPageForm.tsx";
 
 
 const privateRoutes = [
