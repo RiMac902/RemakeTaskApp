@@ -3,7 +3,7 @@ import {createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, upd
 import {firebaseAuth} from "../../firebase.ts";
 import {AuthState, SignInCredentials, SignUpCredentials} from "../../types/authType.ts";
 import {IUser} from "../../types/userType.ts";
-
+import { getDatabase, ref, set } from "firebase/database";
 
 export const signIn = createAsyncThunk(
     'auth/signIn',
@@ -28,6 +28,13 @@ export const signUp = createAsyncThunk(
         try {
             const {user} = await createUserWithEmailAndPassword(firebaseAuth, email, password);
             await updateProfile(user, {displayName});
+
+            const db = getDatabase();
+            set(ref(db, 'users/' + user.uid), {
+                userId: user.uid,
+                displayName,
+            });
+
             if (redirectToHome) {
                 redirectToHome();
             }

@@ -7,7 +7,7 @@ import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
 import {uploadAvatar} from "../store/features/userSlice.ts";
 import LoadingButton from '@mui/lab/LoadingButton';
 
-const Profile = () => {
+const ProfilePage = () => {
     const [photo, setPhoto] = useState<File | null>(null);
     const {getUser} = getUserData(firebaseAuth);
     const {  isLoading, error } = useAppSelector(state => state.user);
@@ -45,4 +45,4 @@ const Profile = () => {
     );
 };
 
-export default Profile;
+export default ProfilePage;

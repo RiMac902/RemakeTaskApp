@@ -1,10 +1,11 @@
 import AuthPage from "./pages/AuthPage.tsx";
 import HomePage from "./pages/HomePage.tsx";
 import {createBrowserRouter} from "react-router-dom";
-import {PrivateRoute} from "./components/PrivateRoute.tsx";
-import PageNotFound from "./components/PageNotFound.tsx";
-import Profile from "./pages/Profile.tsx";
-import AuthPageForm from "./pages/AuthPageForm.tsx";
+import {PrivateRoute} from "./layout/PrivateRoute.tsx";
+import PageNotFound from "./pages/PageNotFound.tsx";
+import ProfilePage from "./pages/ProfilePage.tsx";
+import CreateTaskPage from "./pages/CreateTaskPage.tsx";
+import CreateProjectPage from "./pages/CreateProjectPage.tsx";
 
 
 const privateRoutes = [
@@ -14,8 +15,17 @@ const privateRoutes = [
     },
     {
         path: "/profile",
-        element: <Profile/>
+        element: <ProfilePage/>
+    },
+    {
+        path: "/createTask",
+        element: <CreateTaskPage/>
+    },
+    {
+        path: "/createProject",
+        element: <CreateProjectPage/>
     }
+
 ];
 
 const publicRoutes = [

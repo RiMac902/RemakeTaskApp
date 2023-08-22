@@ -3,6 +3,7 @@ import {updateProfile, User} from "firebase/auth";
 import {storage} from "../../firebase.ts";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {UploadAvatar} from "../../types/userType.ts";
+import {getDatabase, ref as refDB, update} from "firebase/database";
 
 interface UserState {
     user: User | null;
@@ -26,6 +27,11 @@ export const uploadAvatar = createAsyncThunk(
             await uploadBytes(storageRef, file!);
             const photoURL = await getDownloadURL(storageRef);
             await updateProfile(user!, {photoURL});
+
+            //Adding photoURL in database
+            const db = getDatabase();
+            await update(refDB(db, `users/${user?.uid}`), { photoURL });
+
             return photoURL;
         } catch (error) {
             return rejectWithValue(error);
