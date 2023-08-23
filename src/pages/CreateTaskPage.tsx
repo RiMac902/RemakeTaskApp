@@ -1,7 +1,6 @@
 import React, {FC} from 'react';
 import {Box, InputBase, Paper, Stack, Typography} from "@mui/material";
 import {grey, indigo} from "@mui/material/colors";
-import MainField from "../layout/MainField.tsx";
 import Header from "../components/Header.tsx";
 
 const CreateTaskPage: FC = () => {

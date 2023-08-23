@@ -1,6 +1,6 @@
 import React from 'react';
 import {grey} from "@mui/material/colors";
-import {Avatar, Box, Button, Divider, Paper, Stack, Typography} from "@mui/material";
+import {Avatar, Box, Button, Paper, Stack, Typography} from "@mui/material";
 
 const Team = () => {
     return (
