@@ -19,17 +19,14 @@ const Header = () => {
 
     const goToProfilePage = () => navigate('/profile');
     const singOutHandle = () => dispatch(signOutAccount());
-    // const goToCreateTaskPage = () => navigate('/createTask');
-    const goToCreateProjectPage = () => navigate('/createProject');
-
 
     return (
         <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
             <Stack direction="row" justifyContent="space-between" sx={{padding: 2}} spacing={0}>
                 <Button onClick={singOutHandle} variant="outlined" sx={{
-                        borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
-                            bgcolor: grey[300],
-                        }
+                    borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
+                        bgcolor: grey[300],
+                    }
                 }}>Sign Out</Button>
                 <Stack direction="row" alignItems="center">
                     {isLoading
@@ -37,20 +34,14 @@ const Header = () => {
                             <Skeleton width={90} height={40} sx={{marginX: 2}}/>
                             <Skeleton variant="circular" width={40} height={40} sx={{marginX: 2}}/>
                         </>)
-                        : (<>
-                            <Button onClick={goToCreateProjectPage} variant="outlined" disabled={currentPath === '/createProject'} sx={{
-                                marginX: 2,
-                                borderRadius: 5,
-                                fontWeight: 'bold',
-                                backgroundColor: 'white',
-                                height: '40px',
-                                ":hover": {bgcolor: grey[300]}
-                            }}>New Project</Button>
-
+                        : (
                             <Button disabled={currentPath === '/profile'} onClick={goToProfilePage} sx={{padding: 0}}>
-                                <Avatar src={photoURL || ''} sx={{border: '2px solid #fff',  ":hover": {border: `2px solid ${grey[300]}`}}}></Avatar>
+                                <Avatar src={photoURL || ''} sx={{
+                                    border: '2px solid #fff',
+                                    ":hover": {border: `2px solid ${grey[300]}`}
+                                }}></Avatar>
                             </Button>
-                        </>)
+                        )
                     }
                 </Stack>
             </Stack>

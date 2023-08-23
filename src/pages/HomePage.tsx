@@ -1,14 +1,15 @@
 import React, {FC, useState} from "react";
 import DashBoard from "../layout/DashBoard.tsx";
-import MainField from "../layout/MainField.tsx";
+import Header from "../components/Header.tsx";
 
 const HomePage: FC = () => {
     const [taskIsExist, setTaskIsExist] = useState<boolean>();
 
     return (
-        <MainField>
+        <>
+            <Header/>
             {taskIsExist ? <DashBoard/> : <DashBoard/>}
-        </MainField>
+        </>
     );
 };
 
