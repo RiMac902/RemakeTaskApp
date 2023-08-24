@@ -25,8 +25,7 @@ const Header = () => {
 
     return (
         <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{padding: 2}} spacing={0}>
-
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{padding: 2,}} spacing={0}>
 
                 {isCompact
                     ? <IconButton onClick={singOutHandle}>
@@ -45,17 +44,20 @@ const Header = () => {
                         }
                     }}>Sign Out</Button>}
 
-                    <Typography sx={{
-                        marginX: 1,
-                        color: '#fff',
-                        fontSize: {
-                            xs: '18px',
-                            sm: '18px',
-                            md: '18px',
-                            lg: '20px',
-                            xl: '24px'
-                        }
-                    }}>TaskFlow</Typography>
+                <Typography sx={{
+                    position: 'absolute',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    marginX: 1,
+                    color: '#fff',
+                    fontSize: {
+                        xs: '18px',
+                        sm: '18px',
+                        md: '18px',
+                        lg: '20px',
+                        xl: '24px'
+                    }
+                }}>TaskFlow</Typography>
 
                 <Stack direction="row" alignItems="center">
                     {isLoading
@@ -65,15 +67,20 @@ const Header = () => {
                         </>)
                         : (
                             <>
-                                <Typography sx={{
-                                    color: '#fff', fontSize: {
-                                        xs: '18px',
-                                        sm: '18px',
-                                        md: '18px',
-                                        lg: '20px',
-                                        xl: '24px'
-                                    }
-                                }}>{getUser?.displayName}</Typography>
+                                {
+                                    isCompact
+                                        ? null
+                                        : <Typography sx={{
+                                            color: '#fff', fontSize: {
+                                                xs: '18px',
+                                                sm: '18px',
+                                                md: '18px',
+                                                lg: '20px',
+                                                xl: '24px'
+                                            }
+                                        }}>{getUser?.displayName}</Typography>
+                                }
+
                                 <Button disabled={currentPath === '/profile'} onClick={goToProfilePage}
                                         sx={{padding: 0, minWidth: 0, marginLeft: 2}}>
                                     <Avatar src={photoURL || ''} sx={{
