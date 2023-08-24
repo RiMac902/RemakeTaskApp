@@ -49,6 +49,7 @@ const Header = () => {
                     left: '50%',
                     transform: 'translateX(-50%)',
                     color: '#fff',
+                    userSelect: 'none',
                     textAlign :'center',
                     fontSize: {
                         xs: '18px',
@@ -71,6 +72,7 @@ const Header = () => {
                                     isCompact
                                         ? null
                                         : <Typography sx={{
+                                            userSelect: 'none',
                                             color: '#fff', fontSize: {
                                                 xs: '18px',
                                                 sm: '18px',
