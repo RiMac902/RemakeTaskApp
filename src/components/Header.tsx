@@ -48,8 +48,8 @@ const Header = () => {
                     position: 'absolute',
                     left: '50%',
                     transform: 'translateX(-50%)',
-                    marginX: 1,
                     color: '#fff',
+                    textAlign :'center',
                     fontSize: {
                         xs: '18px',
                         sm: '18px',
