@@ -6,6 +6,7 @@ import getUserData from "../hooks/getUserData.tsx";
 import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
 import {uploadAvatar} from "../store/features/userSlice.ts";
 import LoadingButton from '@mui/lab/LoadingButton';
+import MainLayout from "../layout/MainLayout.tsx";
 
 const ProfilePage = () => {
     const [photo, setPhoto] = useState<File | null>(null);
@@ -25,8 +26,7 @@ const ProfilePage = () => {
 
 
     return (
-        <>
-                <Header/>
+        <MainLayout>
 
                 <Typography variant={'h1'}>{getUser?.displayName || 'Loading...'}</Typography>
 
@@ -41,7 +41,7 @@ const ProfilePage = () => {
                     <input type="file" onChange={handleChange} />
                 </Box>
 
-        </>
+        </MainLayout>
     );
 };
 

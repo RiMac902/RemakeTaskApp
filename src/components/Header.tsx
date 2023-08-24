@@ -1,17 +1,20 @@
 import React from 'react';
 import {grey, indigo} from "@mui/material/colors";
-import {Avatar, Button, Paper, Skeleton, Stack} from "@mui/material";
+import {Avatar, Button, Paper, Skeleton, Stack, Typography, useMediaQuery, IconButton} from "@mui/material";
 import {signOutAccount} from "../store/features/authSlice.ts";
 import {useAppDispatch} from "../hooks/reduxHooks.ts";
 import {useLocation, useNavigate} from "react-router-dom";
 import {firebaseAuth} from "../firebase.ts";
 import getUserData from "../hooks/getUserData.tsx";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 
 const Header = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const location = useLocation();
+    const isCompact = useMediaQuery('(max-width:600px)');
+
     const currentPath = location.pathname;
 
     const {getUser, isLoading} = getUserData(firebaseAuth);
@@ -22,12 +25,38 @@ const Header = () => {
 
     return (
         <Paper elevation={5} sx={{borderRadius: 5, bgcolor: indigo[500], margin: 2}}>
-            <Stack direction="row" justifyContent="space-between" sx={{padding: 2}} spacing={0}>
-                <Button onClick={singOutHandle} variant="outlined" sx={{
-                    borderRadius: 5, fontWeight: 'bold', backgroundColor: 'white', ":hover": {
-                        bgcolor: grey[300],
-                    }
-                }}>Sign Out</Button>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{padding: 2}} spacing={0}>
+
+
+                {isCompact
+                    ? <IconButton onClick={singOutHandle}>
+                        <LogoutIcon sx={{color: 'white'}}/>
+                    </IconButton>
+
+                    : <Button onClick={singOutHandle} variant="outlined" sx={{
+                        borderRadius: 5, fontWeight: 'bold', whiteSpace: 'nowrap', fontSize: {
+                            xs: '10px',
+                            sm: '12px',
+                            md: '14px',
+                            lg: '14px',
+                            xl: '14px'
+                        }, backgroundColor: 'white', ":hover": {
+                            bgcolor: grey[300],
+                        }
+                    }}>Sign Out</Button>}
+
+                    <Typography sx={{
+                        marginX: 1,
+                        color: '#fff',
+                        fontSize: {
+                            xs: '18px',
+                            sm: '18px',
+                            md: '18px',
+                            lg: '20px',
+                            xl: '24px'
+                        }
+                    }}>TaskFlow</Typography>
+
                 <Stack direction="row" alignItems="center">
                     {isLoading
                         ? (<>
@@ -35,12 +64,38 @@ const Header = () => {
                             <Skeleton variant="circular" width={40} height={40} sx={{marginX: 2}}/>
                         </>)
                         : (
-                            <Button disabled={currentPath === '/profile'} onClick={goToProfilePage} sx={{padding: 0}}>
-                                <Avatar src={photoURL || ''} sx={{
-                                    border: '2px solid #fff',
-                                    ":hover": {border: `2px solid ${grey[300]}`}
-                                }}></Avatar>
-                            </Button>
+                            <>
+                                <Typography sx={{
+                                    color: '#fff', fontSize: {
+                                        xs: '18px',
+                                        sm: '18px',
+                                        md: '18px',
+                                        lg: '20px',
+                                        xl: '24px'
+                                    }
+                                }}>{getUser?.displayName}</Typography>
+                                <Button disabled={currentPath === '/profile'} onClick={goToProfilePage}
+                                        sx={{padding: 0, minWidth: 0, marginLeft: 2}}>
+                                    <Avatar src={photoURL || ''} sx={{
+                                        height: {
+                                            xs: '30px',
+                                            sm: '40px',
+                                            md: '40px',
+                                            lg: '40px',
+                                            xl: '40px'
+                                        },
+                                        width: {
+                                            xs: '30px',
+                                            sm: '40px',
+                                            md: '40px',
+                                            lg: '40px',
+                                            xl: '40px'
+                                        },
+                                        border: '2px solid #fff',
+                                        ":hover": {border: `2px solid ${grey[300]}`}
+                                    }}></Avatar>
+                                </Button>
+                            </>
                         )
                     }
                 </Stack>

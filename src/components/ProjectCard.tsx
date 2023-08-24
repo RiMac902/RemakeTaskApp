@@ -3,7 +3,7 @@ import {Card, CardActionArea, CardContent, Typography} from "@mui/material";
 
 const ProjectCard = () => {
     return (
-        <Card sx={{ minWidth: '100%', minHeight: '10rem', maxHeight: '10rem'}} >
+        <Card elevation={5} sx={{borderRadius: 5 ,minWidth: '100%', minHeight: '10rem', maxHeight: '10rem'}} >
             <CardActionArea sx={{width: '100%', height: '100%',}}>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">

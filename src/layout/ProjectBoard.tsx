@@ -11,6 +11,7 @@ const ProjectBoard: FC = () => {
     const currentPath = location.pathname;
 
     const goToCreateProjectPage = () => navigate('/createProject');
+
     return (
         <Stack direction="column" sx={{marginTop: 2}}>
             <Paper sx={{bgcolor: grey[50], marginX: 1, borderRadius: 5}} elevation={5}>
@@ -23,9 +24,18 @@ const ProjectBoard: FC = () => {
                     }}>Projects</Typography>
 
                     <Button onClick={goToCreateProjectPage} variant="outlined" disabled={currentPath === '/createProject'} sx={{
-                        marginX: 2,
+                        marginX: 3,
                         borderRadius: 5,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
                         fontWeight: 'bold',
+                        fontSize: {
+                            xs: '10px',
+                            sm: '12px',
+                            md: '14px',
+                            lg: '14px',
+                            xl: '14px'
+                        },
                         backgroundColor: 'white',
                         height: '40px',
                         ":hover": {bgcolor: grey[300]}
