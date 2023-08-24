@@ -21,6 +21,7 @@ const Header = () => {
     const {photoURL} = getUser ?? {};
 
     const goToProfilePage = () => navigate('/profile');
+    const goToHomePage = () => navigate('/home');
     const singOutHandle = () => dispatch(signOutAccount());
 
     return (
@@ -44,11 +45,12 @@ const Header = () => {
                         }
                     }}>Sign Out</Button>}
 
-                <Typography sx={{
+                <Typography onClick={goToHomePage} sx={{
                     position: 'absolute',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     color: '#fff',
+                    cursor: 'pointer',
                     userSelect: 'none',
                     textAlign :'center',
                     fontSize: {
