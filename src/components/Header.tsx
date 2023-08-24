@@ -88,20 +88,8 @@ const Header = () => {
                                 <Button disabled={currentPath === '/profile'} onClick={goToProfilePage}
                                         sx={{padding: 0, minWidth: 0, marginLeft: 2}}>
                                     <Avatar src={photoURL || ''} sx={{
-                                        height: {
-                                            xs: '30px',
-                                            sm: '40px',
-                                            md: '40px',
-                                            lg: '40px',
-                                            xl: '40px'
-                                        },
-                                        width: {
-                                            xs: '30px',
-                                            sm: '40px',
-                                            md: '40px',
-                                            lg: '40px',
-                                            xl: '40px'
-                                        },
+                                        height: '40px',
+                                        width: '40px',
                                         border: '2px solid #fff',
                                         ":hover": {border: `2px solid ${grey[300]}`}
                                     }}></Avatar>
