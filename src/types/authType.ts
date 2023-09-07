@@ -1,4 +1,4 @@
-import {IUser} from "./userType.ts";
+import {User} from "firebase/auth";
 
 export interface SignUpCredentials {
     email: string;
@@ -14,7 +14,7 @@ export interface SignInCredentials {
 }
 
 export interface AuthState {
-    user: IUser | null;
+    user: User | null;
     isLoading: boolean;
     error: string | null;
 }

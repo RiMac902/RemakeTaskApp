@@ -4,14 +4,14 @@ import {useNavigate} from "react-router-dom";
 import {signIn, signUp} from "../store/features/authSlice.ts";
 import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
 import {Controller, useForm} from "react-hook-form";
-import {FormValues} from "../types/formType.ts";
+import {AuthValues} from "../types/formType.ts";
 
 const AuthPage: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { isLoading, error } = useAppSelector((state) => state.auth);
     const [isSignInMode, setIsSignInMode] = useState<boolean>(false);
-    const { control, handleSubmit, formState: { errors } } = useForm<FormValues>({
+    const { control, handleSubmit, formState: { errors } } = useForm<AuthValues>({
         defaultValues: {
             email: '',
             password: '',
@@ -23,12 +23,12 @@ const AuthPage: FC = () => {
         navigate('/home')
     }
 
-    const onSubmit = handleSubmit(async (data) => {
+    const onSubmit = handleSubmit((data) => {
         const { email, password, displayName } = data;
         if (!isSignInMode) {
-            await dispatch(signIn({ email, password, redirectToHome }));
+            dispatch(signIn({ email, password, redirectToHome }));
         } else {
-            await dispatch(signUp({ email, password, displayName, redirectToHome }));
+            dispatch(signUp({ email, password, displayName, redirectToHome }));
         }
     });
 

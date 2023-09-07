@@ -6,6 +6,7 @@ import PageNotFound from "./pages/PageNotFound.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import CreateTaskPage from "./pages/CreateTaskPage.tsx";
 import CreateProjectPage from "./pages/CreateProjectPage.tsx";
+import ProjectPage from "./pages/ProjectPage.tsx";
 
 
 const privateRoutes = [
@@ -24,6 +25,10 @@ const privateRoutes = [
     {
         path: "/createProject",
         element: <CreateProjectPage/>
+    },
+    {
+        path: "/project/:id",
+        element: <ProjectPage/>
     }
 
 ];

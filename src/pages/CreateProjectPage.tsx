@@ -3,7 +3,6 @@ import {Paper, Stack, Typography} from "@mui/material";
 import {indigo} from "@mui/material/colors";
 import Team from "../components/Team.tsx";
 import ProjectForm from "../components/ProjectForm.tsx";
-import Header from "../components/Header.tsx";
 import MainLayout from "../layout/MainLayout.tsx";
 
 const CreateProjectPage = () => {
