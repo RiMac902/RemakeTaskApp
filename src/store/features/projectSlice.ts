@@ -2,17 +2,7 @@ import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {ProjectValues} from "../../types/formType.ts";
 import {ProjectState} from "../../types/projectType.ts";
 import {getDatabase, ref, set, push} from "firebase/database";
-
-export const getProject = createAsyncThunk(
-    'project/get',
-    async ({title, description}: ProjectValues, {dispatch, rejectWithValue}) => {
-        try {
-
-        } catch (error) {
-            return rejectWithValue('CreateProject failed');
-        }
-    }
-);
+import {redirect, useNavigate} from "react-router-dom";
 
 
 export const createProject = createAsyncThunk(
@@ -20,7 +10,7 @@ export const createProject = createAsyncThunk(
     async ({user, title, description, redirectToProjectPage}: ProjectValues, {dispatch, rejectWithValue}) => {
         try {
             const db = getDatabase();
-            const newProjectRef = push(ref(db, `users/${user!.uid}/projects/${title}`), {
+            const newProjectRef = push(ref(db, `users/${user!.uid}/projects/`), {
                 title,
                 description,
             });
@@ -36,6 +26,18 @@ export const createProject = createAsyncThunk(
         }
     }
 );
+
+export const getProject = createAsyncThunk(
+    'project/get',
+    async ({title, description}: ProjectValues, {dispatch, rejectWithValue}) => {
+        try {
+
+        } catch (error) {
+            return rejectWithValue('CreateProject failed');
+        }
+    }
+);
+
 
 export const editProject = createAsyncThunk(
     'project/edit',
@@ -63,6 +65,7 @@ export const deleteProject = createAsyncThunk(
 const initialState: ProjectState = {
     title: '',
     description: '',
+    projectId: '',
     isLoading: false,
     error: null,
 }
@@ -91,7 +94,7 @@ const projectSlice = createSlice({
                 state.isLoading = true;
                 state.error = null;
             })
-            .addCase(createProject.fulfilled, state => {
+            .addCase(createProject.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.error = null;
             })
@@ -132,5 +135,5 @@ const projectSlice = createSlice({
     }
 });
 
-
+// export const {setProjectId} = projectSlice.actions;
 export const projectReducer = projectSlice.reducer;

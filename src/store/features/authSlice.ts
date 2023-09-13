@@ -29,7 +29,7 @@ export const signUp = createAsyncThunk(
             await updateProfile(user, {displayName});
 
             const db = getDatabase();
-            set(ref(db, 'users/' + user.uid), {
+            await set(ref(db, 'users/' + user.uid), {
                 userId: user.uid,
                 displayName,
             });
@@ -48,7 +48,7 @@ export const signOutAccount = createAsyncThunk(
     'auth/signOut',
     async (_, {dispatch, rejectWithValue}) => {
         try {
-            signOut(firebaseAuth);
+            await signOut(firebaseAuth);
         } catch (error) {
             return rejectWithValue(error);
         }

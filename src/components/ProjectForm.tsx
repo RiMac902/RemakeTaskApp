@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, Button, InputBase, Paper, Stack} from "@mui/material";
 import {grey, indigo} from "@mui/material/colors";
 import {Controller, useForm} from "react-hook-form";
@@ -6,13 +6,14 @@ import {ProjectValues} from "../types/formType.ts";
 import getUserData from "../hooks/getUserData.tsx";
 import {firebaseAuth} from "../firebase.ts";
 import {useNavigate} from "react-router-dom";
-import {useAppDispatch} from "../hooks/reduxHooks.ts";
+import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
 import {createProject} from "../store/features/projectSlice.ts";
 
 const ProjectForm = () => {
     const {getUser, isLoading} = getUserData(firebaseAuth);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
+    const projectId = useAppSelector(state => state.project.projectId);
     const {control, handleSubmit, formState: {errors}} = useForm<ProjectValues>({
         defaultValues: {
             title: '',
@@ -22,15 +23,14 @@ const ProjectForm = () => {
 
 
     const redirectToProjectPage = (projectId: string | null) => {
-        if (projectId !== null) {
-            navigate(`/project/${projectId}`);
-        }
+        navigate(`/project/${projectId}`)
     }
 
     const onSubmit = handleSubmit(async (data) => {
-        const { title, description } = data;
+        const {title, description} = data;
         dispatch(createProject({user: getUser, title, description, redirectToProjectPage}));
     });
+
 
     return (
         <Paper sx={{
@@ -88,11 +88,11 @@ const ProjectForm = () => {
                         variant="contained"
                         size="large"
                         sx={{
-                        borderRadius: 5, backgroundColor: indigo[500],
-                        '&:hover': {
-                            backgroundColor: indigo[600],
-                        },
-                    }}>Create</Button>
+                            borderRadius: 5, backgroundColor: indigo[500],
+                            '&:hover': {
+                                backgroundColor: indigo[600],
+                            },
+                        }}>Create</Button>
                 </Stack>
             </form>
         </Paper>
