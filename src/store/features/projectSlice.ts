@@ -1,26 +1,20 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {ProjectValues} from "../../types/formType.ts";
 import {ProjectState} from "../../types/projectType.ts";
-import {getDatabase, ref, set, push} from "firebase/database";
-import {redirect, useNavigate} from "react-router-dom";
+import {getDatabase, push, ref, child, get} from "firebase/database";
 
 
 export const createProject = createAsyncThunk(
     'project/create',
-    async ({user, title, description, redirectToProjectPage}: ProjectValues, {dispatch, rejectWithValue}) => {
+    async ({user, title, description}: ProjectValues, {dispatch, rejectWithValue}) => {
         try {
             const db = getDatabase();
-            const newProjectRef = push(ref(db, `users/${user!.uid}/projects/`), {
+            const newProjectRef = await push(ref(db, `users/${user!.uid}/projects/`), {
                 title,
                 description,
             });
-
-            const projectKey = newProjectRef.key;
-
-            if (redirectToProjectPage) {
-                redirectToProjectPage(projectKey);
-            }
-
+            const projectId = newProjectRef.key;
+            return {projectId} as ProjectState;
         } catch (error) {
             return rejectWithValue('CreateProject failed');
         }
@@ -29,11 +23,18 @@ export const createProject = createAsyncThunk(
 
 export const getProject = createAsyncThunk(
     'project/get',
-    async ({title, description}: ProjectValues, {dispatch, rejectWithValue}) => {
+    async ({ projectId }: { projectId: string }, {dispatch, rejectWithValue}) => {
         try {
+            const dbRef = ref(getDatabase());
+            const readOnceProject = await get(child(dbRef, `users/4HV0YZhqU6YvO62RyOO8klmf5W82/projects/${projectId}`));
 
+            if (readOnceProject.exists()) {
+                const {title, description} = await readOnceProject.val();
+
+                return {title, description} as ProjectState;
+            }
         } catch (error) {
-            return rejectWithValue('CreateProject failed');
+            return rejectWithValue('GetProject  failed');
         }
     }
 );
@@ -41,18 +42,18 @@ export const getProject = createAsyncThunk(
 
 export const editProject = createAsyncThunk(
     'project/edit',
-    async ({title, description, redirectToProjectPage}: ProjectValues, {dispatch, rejectWithValue}) => {
+    async ({title, description}: ProjectValues, {dispatch, rejectWithValue}) => {
         try {
 
         } catch (error) {
-            return rejectWithValue('CreateProject failed');
+            return rejectWithValue('editProject failed');
         }
     }
 );
 
 export const deleteProject = createAsyncThunk(
     'project/delete',
-    async ({title, description, redirectToProjectPage}: ProjectValues, {dispatch, rejectWithValue}) => {
+    async ({title, description}: ProjectValues, {dispatch, rejectWithValue}) => {
         try {
 
         } catch (error) {
@@ -81,13 +82,17 @@ const projectSlice = createSlice({
                 state.error = null;
             })
             .addCase(getProject.fulfilled, (state, action) => {
+                const { title, description } = action.payload as ProjectState;
                 state.isLoading = false;
+                state.title = title;
+                state.description = description;
+                state.projectId = null;
                 state.error = null;
             })
             .addCase(getProject.rejected, (state, action) => {
                 state.isLoading = false;
-                state.title = null;
-                state.description = null;
+                state.title = 'Project not found';
+                state.description = 'This project does not exist';
                 state.error = action.payload as string;
             })
             .addCase(createProject.pending, state => {
@@ -95,13 +100,16 @@ const projectSlice = createSlice({
                 state.error = null;
             })
             .addCase(createProject.fulfilled, (state, action) => {
+                const { projectId } = action.payload as ProjectState;
                 state.isLoading = false;
+                state.projectId = projectId;
                 state.error = null;
             })
             .addCase(createProject.rejected, (state, action) => {
                 state.isLoading = false;
                 state.title = null;
                 state.description = null;
+                state.projectId = null;
                 state.error = action.payload as string;
             })
             .addCase(editProject.pending, state => {

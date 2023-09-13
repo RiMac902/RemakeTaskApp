@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Box, Button, InputBase, Paper, Stack} from "@mui/material";
 import {grey, indigo} from "@mui/material/colors";
 import {Controller, useForm} from "react-hook-form";
@@ -10,7 +10,7 @@ import {useAppDispatch, useAppSelector} from "../hooks/reduxHooks.ts";
 import {createProject} from "../store/features/projectSlice.ts";
 
 const ProjectForm = () => {
-    const {getUser, isLoading} = getUserData(firebaseAuth);
+    const {getUser} = getUserData(firebaseAuth);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const projectId = useAppSelector(state => state.project.projectId);
@@ -22,13 +22,13 @@ const ProjectForm = () => {
     });
 
 
-    const redirectToProjectPage = (projectId: string | null) => {
-        navigate(`/project/${projectId}`)
-    }
+    const redirectToProjectPage = async (projectId: string | null) => navigate(`/project/${projectId}`);
 
     const onSubmit = handleSubmit(async (data) => {
         const {title, description} = data;
-        dispatch(createProject({user: getUser, title, description, redirectToProjectPage}));
+        await dispatch(createProject({user: getUser, title, description}));
+        await redirectToProjectPage(projectId);
+        console.log('created projectID:', projectId)
     });
 
 

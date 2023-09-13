@@ -19,7 +19,7 @@ export const createTask = createAsyncThunk(
     async ({user, title, description}: TaskArgs, {rejectWithValue}) => {
         try {
             const db = getDatabase();
-            set(ref(db, `users/${user!.uid}/tasks`), {
+            await set(ref(db, `users/${user!.uid}/tasks`), {
                 title,
                 description,
                 createdBy: user!.displayName,

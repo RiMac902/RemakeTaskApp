@@ -11,5 +11,4 @@ export type ProjectValues = {
     user?: User | null;
     title: string | null;
     description: string | null;
-    redirectToProjectPage?: (projectId: string | null) => void;
 }

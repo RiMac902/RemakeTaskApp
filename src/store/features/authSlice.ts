@@ -6,7 +6,7 @@ import {getDatabase, ref, set} from "firebase/database";
 
 export const signIn = createAsyncThunk(
     'auth/signIn',
-    async ({email, password, redirectToHome}: SignInCredentials, {dispatch, rejectWithValue}) => {
+    async ({email, password, redirectToHome}: SignInCredentials, {rejectWithValue}) => {
         try {
             const response = await signInWithEmailAndPassword(firebaseAuth, email, password);
             const user = response.user;
@@ -23,7 +23,7 @@ export const signIn = createAsyncThunk(
 
 export const signUp = createAsyncThunk(
     'auth/signUp',
-    async ({email, password, displayName, redirectToHome}: SignUpCredentials, {dispatch, rejectWithValue}) => {
+    async ({email, password, displayName, redirectToHome}: SignUpCredentials, {rejectWithValue}) => {
         try {
             const {user} = await createUserWithEmailAndPassword(firebaseAuth, email, password);
             await updateProfile(user, {displayName});
@@ -46,7 +46,7 @@ export const signUp = createAsyncThunk(
 
 export const signOutAccount = createAsyncThunk(
     'auth/signOut',
-    async (_, {dispatch, rejectWithValue}) => {
+    async (_, {rejectWithValue}) => {
         try {
             await signOut(firebaseAuth);
         } catch (error) {

@@ -9,7 +9,7 @@ import {AuthValues} from "../types/formType.ts";
 const AuthPage: FC = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { isLoading, error } = useAppSelector((state) => state.auth);
+    const { isLoading, error, user } = useAppSelector((state) => state.auth);
     const [isSignInMode, setIsSignInMode] = useState<boolean>(false);
     const { control, handleSubmit, formState: { errors } } = useForm<AuthValues>({
         defaultValues: {
@@ -22,6 +22,7 @@ const AuthPage: FC = () => {
     const redirectToHome = () => {
         navigate('/home')
     }
+
 
     const onSubmit = handleSubmit((data) => {
         const { email, password, displayName } = data;
